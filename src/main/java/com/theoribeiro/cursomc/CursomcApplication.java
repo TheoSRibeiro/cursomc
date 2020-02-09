@@ -8,18 +8,27 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.theoribeiro.cursomc.domain.Categoria;
+import com.theoribeiro.cursomc.domain.Cidade;
+import com.theoribeiro.cursomc.domain.Estado;
 import com.theoribeiro.cursomc.domain.Produto;
 import com.theoribeiro.cursomc.repositories.CategoriaRepository;
+import com.theoribeiro.cursomc.repositories.CidadeRepository;
+import com.theoribeiro.cursomc.repositories.EstadoRepository;
 import com.theoribeiro.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner{ //utilizar CommanLineRunner para instanciar o BD
 
 	// O REPOSITORY SALVA OS DADOS NO BD
-	@Autowired 
+	@Autowired //autodependencia
 	private CategoriaRepository categoriaRepository;
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	@Autowired
+	private EstadoRepository estadorepository;
 	
 	
 	public static void main(String[] args) {
@@ -29,6 +38,7 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 	@Override
 	public void run(String... args) throws Exception { //INSTANCIAR O BD
 		
+		//CLASSES CATEGORIA E PRODUTO
 		Categoria cat1 = new Categoria(null,"Informática");
 		Categoria cat2 = new Categoria(null,"Escritório");
 		
@@ -53,6 +63,28 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 		//REPOSITORY PARA SALVAR OS PRODUTOS, FOI CRIADO LA EM CIMA (@AUTOWIRED)  
 		//CRIADO NA CLASSE ProdutoRepository 
 		produtoRepository.save(Arrays.asList(p1,p2,p3));
+		
+		//CLASSES ESTADO E CIDADE
+		Estado est1 = new Estado(null,"Minas Gerais");
+		Estado est2 = new Estado(null,"São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia",est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+		
+		//ASSOCIACAO ENTRE OS ESTADOS E AS CIDADES DE CADA ESTADO
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2,c3));
+		
+		//REPOSITORY PARA SALVAR OS ESTADOS, FOI CRIADO LA EM CIMA (@AUTOWIRED)  
+		//CRIADO NA CLASSE EstadoRepository 
+		estadorepository.save(Arrays.asList(est1,est2));// PRIMEIRO SALVA OS ESTADOS, JA QUE CADA CIDADE POSSUI O ID DO ESTADO
+		
+		//REPOSITORY PARA SALVAR AS CIDADES, FOI CRIADO LA EM CIMA (@AUTOWIRED)  
+		//CRIADO NA CLASSE CidadeRepository
+		cidadeRepository.save(Arrays.asList(c1,c2,c3));
+		
+			
 		
 	}
 
