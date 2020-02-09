@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.theoribeiro.cursomc.domain.Categoria;
 import com.theoribeiro.cursomc.repositories.CategoriaRepository;
+import com.theoribeiro.cursomc.services.exceptions.ObjectNotFoundException;
 
 /*
  * CAMADA DE SERVICO - Retorna operação de AOS DADOS (Camada de Acesso aos dados)
@@ -18,6 +19,11 @@ public class CategoriaService {
 	
 	public Categoria buscar(Integer id) {
 		Categoria obj = repo.findOne(id); //vai no BD buscar uma Categoria e retorna um Objeto pronto
+		
+		if(obj == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: "+ Categoria.class.getName());
+		}
+		
 		return obj;
 	}
 }

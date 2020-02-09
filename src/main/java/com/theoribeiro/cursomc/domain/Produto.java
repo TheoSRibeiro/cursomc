@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 //MAPEAMENTO DA TABELA PRODUTO
 @Entity
 public class Produto implements Serializable{
@@ -23,6 +25,9 @@ public class Produto implements Serializable{
 	private Integer id;
 	private String nome;
 	private Double preco;
+	
+	
+	@JsonBackReference //TIRAR O ERRO DOS OBJETOS BUSCADOS DA ASSOCIACAO ENTRE PRODUTO E CATEGORIA, OMITE A LISTA DE CATEGORIAS A CADA PRODUTO, JÁ QUE JA EXECUTOU UMA VEZ
 	
 	/*MAPEAMENTO DAS RELACOES ENTRE AS TABELAS PRODUTO E CATEGORIA, COMO SAO N PARA N, CRIAR UMA TERCEIRA TABELA COM
 	  OS CODIGOS IDS DAS 2 TABELAS	

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Categoria implements Serializable{
 	
@@ -19,6 +21,8 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	
+	@JsonManagedReference //SERIALIZAR OS PRODUTOS SEM ERRO PARA OS OBJETOS ASSOCIADOS DA CATEGORIA
 	
 	/*MAPEAMENTO DAS RELACOES ENTRE AS TABELAS PRODUTO E CATEGORIA, COMO SAO N PARA N, CRIAR UMA TERCEIRA TABELA COM
 	  OS CODIGOS IDS DAS 2 TABELAS, COMO JA FEZ ISSO NA CLASSE PRODUTO, NAO PRECISA REFAZER AQUI, ASSSIM:	
