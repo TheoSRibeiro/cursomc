@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Cidade implements Serializable{
 	
@@ -19,6 +22,7 @@ public class Cidade implements Serializable{
 	private Integer id;
 	private String nome;
 	
+	@JsonManagedReference//PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - SERIALIZA OS ESTADOS NORMALMENTE
 	//MAPEAMENTO COM JPA
 	@ManyToOne //ASSOCIACAO ENTRE TABELAS N PARA 1
 	@JoinColumn(name="estado_id")//CHAVE ESTANGEIRA DA TABELA CIDADE NO BD
