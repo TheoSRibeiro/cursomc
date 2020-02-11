@@ -13,6 +13,7 @@ import com.theoribeiro.cursomc.domain.Cidade;
 import com.theoribeiro.cursomc.domain.Cliente;
 import com.theoribeiro.cursomc.domain.Endereco;
 import com.theoribeiro.cursomc.domain.Estado;
+import com.theoribeiro.cursomc.domain.ItemPedido;
 import com.theoribeiro.cursomc.domain.Pagamento;
 import com.theoribeiro.cursomc.domain.PagamentoComBoleto;
 import com.theoribeiro.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.theoribeiro.cursomc.repositories.CidadeRepository;
 import com.theoribeiro.cursomc.repositories.ClienteRepository;
 import com.theoribeiro.cursomc.repositories.EnderecoRepository;
 import com.theoribeiro.cursomc.repositories.EstadoRepository;
+import com.theoribeiro.cursomc.repositories.ItemPedidoRepository;
 import com.theoribeiro.cursomc.repositories.PagamentoRepository;
 import com.theoribeiro.cursomc.repositories.PedidoRepository;
 import com.theoribeiro.cursomc.repositories.ProdutoRepository;
@@ -52,6 +54,9 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 	private PedidoRepository pedidorepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -152,6 +157,26 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 		//SALVAR PRIMEIRO OS PEDIDOS, POIS ELES SAO INDEPENDENTES
 		pedidorepository.save(Arrays.asList(ped1, ped2));
 		pagamentoRepository.save(Arrays.asList(pagto1, pagto2));
+		
+		//CLASSE ITEMPEDIDO, PRODUTO E PEDIDO
+		
+		//INSTANCIACAO DE ITEMPEDIDO
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		//ASSOCIACAO ENTRE PEDIDO E ITEMPEDIDO
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		//ASSOCIACAO ENTRE PRODUTO E ITEMPEDIDO
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		//CRIAR REPOSITORY PARA SALVAR OS ITENS DE PEDIDO NO BD
+		itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3));
+		
 		
 	}
 

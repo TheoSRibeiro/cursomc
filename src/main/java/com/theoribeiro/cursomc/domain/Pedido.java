@@ -2,6 +2,8 @@ package com.theoribeiro.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity //MAPEAMENTO RELACIONAL
@@ -36,6 +39,9 @@ public class Pedido implements Serializable{
 	@JoinColumn(name="endereco_de_entrega_id") //NOME NA COLUNA NO BD (CHAVE ESTRANGEIRA)
 	private Endereco enderecoDeEntrega;
 	
+	//MAPEAMETO ENTRE PEDIDO E ITEMPEDIDO
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>(); //SET PARA GARANTIR QUE NAO VAI TER ITEM REPETIDO NO MESMO PEDIDO
 	
 	//CONSTRUTORES
 	public Pedido() {
@@ -93,6 +99,14 @@ public class Pedido implements Serializable{
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
 	//HASHCODE AND EQUALS
 	@Override
 	public int hashCode() {
@@ -118,10 +132,5 @@ public class Pedido implements Serializable{
 			return false;
 		return true;
 	}
-
-	
-	
-	
-	
 	
 }

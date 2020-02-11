@@ -2,7 +2,9 @@ package com.theoribeiro.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -40,6 +43,10 @@ public class Produto implements Serializable{
 	//ASSOCIACAO ENTRE PRODUTO E  CATEGORIA, 1 ou + PRODUTOS PODEM TER VARIAS CATEGORIAS
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	//ASSOCIACAO ENTRE PRODUTO E ITEMPEDIDO
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	//CONSTUTOR VAZIO
 	public Produto() {
 	}
@@ -52,6 +59,18 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
+	//IMPLEMENTACAO DO ACESSO DE PRODUTO E PEDIDO
+	public List<Pedido> getPedidos(){
+		List<Pedido> lista = new ArrayList<>();//CRIACAO DA LISTA DE PEDIDOS
+		
+		for(ItemPedido itemPedido : itens) {//PERCORRER OS ITENS DO PEDIDO NA LISTA DE ITENS
+			//PARA CADA PEDIDO EXISTENTE NA LISTA DE ITENS, ADICIONAR O PEDIDO ASSOCIADO A ELE NA LISTA
+			lista.add(itemPedido.getPedido());
+		}
+		return lista;
+	}
+	
+	//GETTERS AND SETTERS
 	public Integer getId() {
 		return id;
 	}
@@ -83,7 +102,17 @@ public class Produto implements Serializable{
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
 	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
 
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
+	//HASHCODE AND EQUALS
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -108,8 +137,9 @@ public class Produto implements Serializable{
 			return false;
 		return true;
 	}
+
 	
 	
 	
-	
+
 }
