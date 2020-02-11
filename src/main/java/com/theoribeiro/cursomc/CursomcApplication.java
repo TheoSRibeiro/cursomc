@@ -1,5 +1,6 @@
 package com.theoribeiro.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.theoribeiro.cursomc.domain.Cidade;
 import com.theoribeiro.cursomc.domain.Cliente;
 import com.theoribeiro.cursomc.domain.Endereco;
 import com.theoribeiro.cursomc.domain.Estado;
+import com.theoribeiro.cursomc.domain.Pagamento;
+import com.theoribeiro.cursomc.domain.PagamentoComBoleto;
+import com.theoribeiro.cursomc.domain.PagamentoComCartao;
+import com.theoribeiro.cursomc.domain.Pedido;
 import com.theoribeiro.cursomc.domain.Produto;
+import com.theoribeiro.cursomc.domain.enums.EstadoPagamento;
 import com.theoribeiro.cursomc.domain.enums.TipoCliente;
 import com.theoribeiro.cursomc.repositories.CategoriaRepository;
 import com.theoribeiro.cursomc.repositories.CidadeRepository;
 import com.theoribeiro.cursomc.repositories.ClienteRepository;
 import com.theoribeiro.cursomc.repositories.EnderecoRepository;
 import com.theoribeiro.cursomc.repositories.EstadoRepository;
+import com.theoribeiro.cursomc.repositories.PagamentoRepository;
+import com.theoribeiro.cursomc.repositories.PedidoRepository;
 import com.theoribeiro.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -39,6 +47,11 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidorepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -115,6 +128,30 @@ public class CursomcApplication implements CommandLineRunner{ //utilizar CommanL
 		
 		//REPOSITORY PARA SALVAR OS ENDERECOS MO BD, FOI CRIADO LA EM CIMA (@AUTOWIRED) - CRIADO NA CLASSE EnderecoRepository
 		enderecoRepository.save(Arrays.asList(e1, e2));
+		
+		//CLASSES PEDIDO, CLIENTE, ENDERECO E PAGAMENTO
+		
+		//CRIAR OBJETO AUXILIAR PARA SALVAR AS DATAS
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm"); //MASCARA DE FORMATACAO PARA INSTANCIAR UMA DATA
+		
+		//INSTANCIAR OS PEDIDOS
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		//INSTANCIAR OS PAGAMENTOS
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		//INFORMAR A PEDIDO QUE EFETUOU UM PAGAMENTO
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		//ASSOCIAR OS CLIENTES AOS PEDIDOS
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		//SALVAR PRIMEIRO OS PEDIDOS, POIS ELES SAO INDEPENDENTES
+		pedidorepository.save(Arrays.asList(ped1, ped2));
+		pagamentoRepository.save(Arrays.asList(pagto1, pagto2));
 		
 	}
 

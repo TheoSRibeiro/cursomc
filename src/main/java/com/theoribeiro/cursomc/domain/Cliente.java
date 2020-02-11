@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -33,6 +34,11 @@ public class Cliente implements Serializable{
 	//ASSOCIACAO COM ENDERECO
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
+	
+	//ASSOCIACAO COM PEDIDO - 1 PARA N
+	@OneToMany
+	@JoinColumn(name = "pedidos_id") //NOME DA CHAVE ESTRANGEIRA NO BD
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	//CRIAR CONJUNTO DE STRINGS PARA ARMAZENAR OS TELEFONES DOS CLIENTES
 	//CONJUNTO PQ NAO ACEITA NUMEROS REPETIDOS
@@ -111,6 +117,14 @@ public class Cliente implements Serializable{
 		this.telefones = telefones;
 	}
 
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -136,9 +150,5 @@ public class Cliente implements Serializable{
 		return true;
 	}
 
-	
-	
-	
-	
 	
 }

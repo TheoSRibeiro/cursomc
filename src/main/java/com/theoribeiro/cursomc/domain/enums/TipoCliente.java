@@ -23,6 +23,7 @@ public enum TipoCliente {
 		return descricao;
 	}
 	
+	//METODO CONVERSAO DE UM INTEIRO PARA TIPOCLIENTE
 	public static TipoCliente toEnum(Integer cod) {
 		if(cod == null) {
 			return null;
