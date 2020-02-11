@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity //MAPEAMENTO OBJETO RELACIONAL
 public class Endereco implements Serializable{
@@ -24,8 +24,10 @@ public class Endereco implements Serializable{
 	private String bairro;
 	private String cep;
 	
-	
-	@JsonBackReference // PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - OS ENDERECOS NAO SERIALIZAM O CLIENTE
+		
+	//@JsonBackReference // PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - OS ENDERECOS NAO SERIALIZAM O CLIENTE
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	@JsonIgnore
 	//ASSOCIACAO COM CLIENTE
 	@ManyToOne
 	@JoinColumn(name="cliente_id")

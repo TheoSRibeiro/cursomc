@@ -14,8 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.theoribeiro.cursomc.domain.enums.TipoCliente;
 
 @Entity //MAPEAMENTO OBJETO RELACIONAL
@@ -30,12 +29,16 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
-	@JsonManagedReference //PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - O CLIENTE SERIALIZA OS ENDERECOS MAS OS ENDERECOS NAO SERIALIZAM OS CLIENTES, SE NAO, FICA COM JSON CICLICA
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	//@JsonManagedReference //PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - O CLIENTE SERIALIZA OS ENDERECOS MAS OS ENDERECOS NAO SERIALIZAM OS CLIENTES, SE NAO, FICA COM JSON CICLICA
 	//ASSOCIACAO COM ENDERECO
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
-	@JsonBackReference //PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - OS PEDIDOS DOS CLIENTES NAO VAO SER SERIALIZADOS
+	//@JsonBackReference //PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - OS PEDIDOS DOS CLIENTES NAO VAO SER SERIALIZADOS
+	
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	@JsonIgnore
 	//ASSOCIACAO COM PEDIDO - 1 PARA N
 	@OneToMany(mappedBy = "cliente") //JA FOI MAPEADO NA CLASSE PEDIDO
 	private List<Pedido> pedidos = new ArrayList<>();

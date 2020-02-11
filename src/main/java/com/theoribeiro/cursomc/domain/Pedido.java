@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity //MAPEAMENTO RELACIONAL
 public class Pedido implements Serializable{
@@ -33,13 +32,17 @@ public class Pedido implements Serializable{
 	//ASSOCIACOES
 	
 	//PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA
-	@JsonManagedReference //O PEDIDO DO PAGAMENTO VAI SER SERIALIZADO MAS O PAGAMENTO NAO
+	//@JsonManagedReference //O PEDIDO DO PAGAMENTO VAI SER SERIALIZADO MAS O PAGAMENTO NAO
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	
 	//MAPEAR O PAGAMENTO COM PEDIDO COM RELACIONAMENTO DE 1 PARA 1
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido") //Casdade PARA NAO GERAR ERRO DE TRANSI-END AL SALVAR UM PEDIDO E PAGAMENTO
 	private Pagamento pagamento;
 	
 	//PERMITIR A SERIALIZACAO DO CLIENTE DE UM PEDIDO PARA NAO DAR ERRO DE SERIALIZACAO JSON CICLICA
-	@JsonManagedReference
+	//@JsonManagedReference
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	
 	//MAPEAR PEDIDO COM CLIENTE - N para 1
 	@ManyToOne
 	@JoinColumn(name = "cliente_id") //NOME NA COLUNA NO BD (CHAVE ESTRANGEIRA)

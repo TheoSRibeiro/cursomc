@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //MAPEAMENTO DA TABELA PRODUTO
@@ -31,7 +30,9 @@ public class Produto implements Serializable{
 	private Double preco;
 	
 	
-	@JsonBackReference //TIRAR O ERRO DOS OBJETOS BUSCADOS DA ASSOCIACAO ENTRE PRODUTO E CATEGORIA, OMITE A LISTA DE CATEGORIAS A CADA PRODUTO, JÁ QUE JA EXECUTOU UMA VEZ
+	//@JsonBackReference //TIRAR O ERRO DOS OBJETOS BUSCADOS DA ASSOCIACAO ENTRE PRODUTO E CATEGORIA, OMITE A LISTA DE CATEGORIAS A CADA PRODUTO, JÁ QUE JA EXECUTOU UMA VEZ
+	//@JsonManagedReference NAO VAI SER MAIS UTILIZADO, TODOS OS @JsonBackReference FOI TROCADO POR @JsonIgnore,
+	@JsonIgnore
 	
 	/*MAPEAMENTO DAS RELACOES ENTRE AS TABELAS PRODUTO E CATEGORIA, COMO SAO N PARA N, CRIAR UMA TERCEIRA TABELA COM
 	  OS CODIGOS IDS DAS 2 TABELAS	
