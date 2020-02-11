@@ -12,9 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.theoribeiro.cursomc.domain.enums.TipoCliente;
 
@@ -35,9 +35,9 @@ public class Cliente implements Serializable{
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
+	@JsonBackReference //PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA - OS PEDIDOS DOS CLIENTES NAO VAO SER SERIALIZADOS
 	//ASSOCIACAO COM PEDIDO - 1 PARA N
-	@OneToMany
-	@JoinColumn(name = "pedidos_id") //NOME DA CHAVE ESTRANGEIRA NO BD
+	@OneToMany(mappedBy = "cliente") //JA FOI MAPEADO NA CLASSE PEDIDO
 	private List<Pedido> pedidos = new ArrayList<>();
 	
 	//CRIAR CONJUNTO DE STRINGS PARA ARMAZENAR OS TELEFONES DOS CLIENTES

@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //MAPEAMENTO DA TABELA PRODUTO
 @Entity
@@ -43,6 +44,9 @@ public class Produto implements Serializable{
 	//ASSOCIACAO ENTRE PRODUTO E  CATEGORIA, 1 ou + PRODUTOS PODEM TER VARIAS CATEGORIAS
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	//PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA
+		//IGNORAR OS ITENS ASSOCIADOS AO PRODUTO, POIS NAO EH NECESSARIO QUE O PRODUTO SAIBA DOS ITENS DO PEDIDO, JA OS ITENS DO PEDIDO EH NECESSARIO SABER DOS PRODUTOS
+	@JsonIgnore
 	//ASSOCIACAO ENTRE PRODUTO E ITEMPEDIDO
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
@@ -58,7 +62,9 @@ public class Produto implements Serializable{
 		this.nome = nome;
 		this.preco = preco;
 	}
-
+	
+	//IGNORAR OS PEDIDOS AQUI TAMBEM PARA NAO OCORRER A SERIALIZACAO DE JSON CICLICA, TODO METODO GET VAI SER SERIALIZADO
+	@JsonIgnore
 	//IMPLEMENTACAO DO ACESSO DE PRODUTO E PEDIDO
 	public List<Pedido> getPedidos(){
 		List<Pedido> lista = new ArrayList<>();//CRIACAO DA LISTA DE PEDIDOS

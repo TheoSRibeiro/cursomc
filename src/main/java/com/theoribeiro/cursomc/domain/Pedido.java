@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity //MAPEAMENTO RELACIONAL
 public class Pedido implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -22,13 +25,21 @@ public class Pedido implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) //ID GERADO AUTOMATICAMENTE
 	private Integer id;
+	
+	//FORMATAR A DATA NO BD PARA NAO APARECER EM ms E SIM NA DATA
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
 	
 	//ASSOCIACOES
+	
+	//PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA
+	@JsonManagedReference //O PEDIDO DO PAGAMENTO VAI SER SERIALIZADO MAS O PAGAMENTO NAO
 	//MAPEAR O PAGAMENTO COM PEDIDO COM RELACIONAMENTO DE 1 PARA 1
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido") //Casdade PARA NAO GERAR ERRO DE TRANSI-END AL SALVAR UM PEDIDO E PAGAMENTO
 	private Pagamento pagamento;
 	
+	//PERMITIR A SERIALIZACAO DO CLIENTE DE UM PEDIDO PARA NAO DAR ERRO DE SERIALIZACAO JSON CICLICA
+	@JsonManagedReference
 	//MAPEAR PEDIDO COM CLIENTE - N para 1
 	@ManyToOne
 	@JoinColumn(name = "cliente_id") //NOME NA COLUNA NO BD (CHAVE ESTRANGEIRA)

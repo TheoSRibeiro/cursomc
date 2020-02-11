@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.theoribeiro.cursomc.domain.enums.EstadoPagamento;
 
 //CLASSE QUE ESTENDE DE PAGAMENTO
@@ -11,7 +12,11 @@ import com.theoribeiro.cursomc.domain.enums.EstadoPagamento;
 public class PagamentoComBoleto extends Pagamento{
 	private static final long serialVersionUID = 1L;
 	
+	//FORMATAR A DATA NO BD PARA NAO APARECER EM ms E SIM NA DATA
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date dataVencimento;
+	//FORMATAR A DATA NO BD PARA NAO APARECER EM ms E SIM NA DATA
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date dataPagamento;
 	
 	//CONSTRUTORES

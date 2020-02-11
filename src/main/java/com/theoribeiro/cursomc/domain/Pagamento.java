@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.theoribeiro.cursomc.domain.enums.EstadoPagamento;
 
 @Entity //MAPEAMENTO OBJETO RELACIONAL
@@ -22,6 +23,8 @@ public abstract class Pagamento implements Serializable{ //ABSTRACT PARA NAO INS
 	private Integer id;
 	private Integer estado; //MUDA PARA INTEGER PARA ARMAZENAR UM NUMERO INTEIRO NO BD
 	
+	//PROTECAO CONTRA SERIALIZACAO DE JSON CICLICA
+	@JsonBackReference //NAO PERMITE A SERIALIZACAO DO PAGAMENTO, SOMENTE DO PEDIDO
 	//ASSOCIACAO
 	@OneToOne
 	@JoinColumn(name = "pedido_id") //CAMPO NO BD QUE MAPEIA O PEDIDO EH pedido_id
